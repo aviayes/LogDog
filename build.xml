@@ -4,6 +4,8 @@
     <property name="build.dir" value="${basedir}/build"/>
     <property name="dest.dir" value="${basedir}/build/dest"/>
 
+    <property name="repository" value="${basedir}/lib"/>
+
     <path id="project.class.path">
         <!--the repository dir must contain:
           - jsch.jar
