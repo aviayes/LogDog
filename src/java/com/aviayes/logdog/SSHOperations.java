@@ -18,7 +18,7 @@ public class SSHOperations {
     private static final Logger logger = Util.getLogger(SSHOperations.class);
 
     public static boolean zip(Session session, String sourcePath, String destPath) {
-        String commandStr = " zip -q " + destPath + " " + sourcePath;
+        String commandStr = " zip -j -q " + destPath + " " + sourcePath;
         logger.info("zip commandStr=" + commandStr);
         return SshUtil.execCommand(session, commandStr, new SshUtil.ResultChecker() {
             @Override
