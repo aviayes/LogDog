@@ -1,0 +1,51 @@
+<project name="LogDog" default="dist" basedir=".">
+
+    <property name="src.java.dir" value="${basedir}/src/java"/>
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="dest.dir" value="${basedir}/build/dest"/>
+
+    <path id="project.class.path">
+        <!--the repository dir must contain:
+          - jsch.jar
+          - junit.jar
+          - log4j.jar
+        -->
+        <fileset dir="${repository}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="compile">
+        <delete dir="${build.dir}" failonerror="false"/>
+        <mkdir dir="${build.dir}/classes"/>
+        <javac source="1.7" target="1.7" classpathref="project.class.path" srcdir="${src.java.dir}"
+               destdir="${build.dir}/classes"/>
+    </target>
+
+    <target name="dist" depends="compile">
+        <mkdir dir="${dest.dir}/lib"/>
+        <copy todir="${dest.dir}/lib">
+            <fileset dir="${repository}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </copy>
+        <jar jarfile="${dest.dir}/lib/logdog.jar" basedir="${build.dir}/classes"/>
+
+        <copy todir="${dest.dir}">
+            <fileset dir="${basedir}/src">
+                <include name="bin/*"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="test" depends="dist">
+        <property name="binDir" location="${build.dir}/bin"/>
+        <java fork="true" classname="com.aviayes.logdog.ui.MainWindow">
+            <arg value="${binDir}"/>
+            <classpath>
+                <path refid="project.class.path"/>
+                <path location="build/classes"/>
+            </classpath>
+        </java>
+    </target>
+</project>
